@@ -5,9 +5,13 @@
 
 trigger:
 - master
+- feature/*
 
 pool:
   vmImage: ubuntu-latest
+
+variables:
+  imageName: 'pipelines-python-docker'
 
 steps:
 - task: UsePythonVersion@0
@@ -31,3 +35,13 @@ steps:
     pip install pytest-cov
     pytest --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml
   displayName: 'pytest'
+
+# Build on master only
+- task: Docker@2
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: Build an image
+  inputs:
+    repository: $(imageName)
+    command: build
+    Dockerfile: app/Dockerfile
+
