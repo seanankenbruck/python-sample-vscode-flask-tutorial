@@ -1,0 +1,214 @@
+# Source information for the tutorial
+https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/python-webapp?view=azure-devops
+
+## Provision the target Azure App Service
+
+In the Cloud Shell, clone your repository
+
+git clone https://github.com/seanankenbruck/python-sample-vscode-flask-tutorial.git
+
+In the Cloud Shell, change directories into the repository folder that has your Python app,
+so the az webapp up command will recognize the app as Python.
+
+cd python-sample-vscode-flask-tutorial
+
+In the Cloud Shell, use az webapp up to create an App Service and initially deploy your app.
+az webapp up -n ankenbruckdevops-flask-demo
+
+### OUTPUT ###
+
+The webapp 'ankenbruckdevops-flask-demo' doesn't exist
+Creating Resource group 'smankenb_rg_5483' ...
+Resource group creation complete
+Creating AppServicePlan 'smankenb_asp_3320' ...
+Creating webapp 'ankenbruckdevops-flask-demo' ...
+Configuring default logging for the app, if not already enabled
+Creating zip with contents of dir /home/sean/python-sample-vscode-flask-tutorial ...
+Getting scm site credentials for zip deployment
+Starting zip deployment. This operation can take a while to complete ...
+Deployment endpoint responded with status code 202
+You can launch the app at http://ankenbruckdevops-flask-demo.azurewebsites.net
+Setting 'az webapp up' default arguments for current directory. Manage defaults with 'az configure --scope local'
+--resource-group/-g default: smankenb_rg_5483
+--sku default: P1V2
+--plan/-p default: smankenb_asp_3320
+--location/-l default: centralus
+--name/-n default: ankenbruckdevops-flask-demo
+{
+  "URL": "http://ankenbruckdevops-flask-demo.azurewebsites.net",
+  "appserviceplan": "smankenb_asp_3320",
+  "location": "centralus",
+  "name": "ankenbruckdevops-flask-demo",
+  "os": "Linux",
+  "resourcegroup": "smankenb_rg_5483",
+  "runtime_version": "python|3.7",
+  "runtime_version_detected": "-",
+  "sku": "PREMIUMV2",
+  "src_path": "//home//sean//python-sample-vscode-flask-tutorial"
+}
+
+##############
+
+If your app uses a custom startup command, set the az webapp config property.
+For example, the python-sample-vscode-flask-tutorial app contains a file named startup.txt
+that contains its specific startup command, so you set the az webapp config property to startup.txt.
+
+- From the first line of output from the previous az webapp up command, copy the name of your resource group,
+which is similar to <your-name>_rg_Linux_<your-region>.
+
+smankenb_rg_5483
+
+- Enter the following command, using your resource group name, your app service name (<your-appservice>),
+and your startup file or command (startup.txt).
+
+az webapp config set -g smankenb_rg_5483 -n ankenbruckdevops-flask-demo --startup-file startup.txt
+
+### OUTPUT ###
+
+{
+  "acrUseManagedIdentityCreds": false,
+  "acrUserManagedIdentityId": null,
+  "alwaysOn": true,
+  "apiDefinition": null,
+  "apiManagementConfig": null,
+  "appCommandLine": "startup.txt",
+  "appSettings": null,
+  "autoHealEnabled": false,
+  "autoHealRules": null,
+  "autoSwapSlotName": null,
+  "azureStorageAccounts": {},
+  "connectionStrings": null,
+  "cors": null,
+  "defaultDocuments": [
+    "Default.htm",
+    "Default.html",
+    "Default.asp",
+    "index.htm",
+    "index.html",
+    "iisstart.htm",
+    "default.aspx",
+    "index.php",
+    "hostingstart.html"
+  ],
+  "detailedErrorLoggingEnabled": false,
+  "documentRoot": null,
+  "experiments": {
+    "rampUpRules": []
+  },
+  "ftpsState": "AllAllowed",
+  "functionAppScaleLimit": 0,
+  "functionsRuntimeScaleMonitoringEnabled": false,
+  "handlerMappings": null,
+  "healthCheckPath": null,
+  "http20Enabled": true,
+  "httpLoggingEnabled": true,
+  "id": "/subscriptions/e638e272-1384-44c1-b03c-04d6d4438d84/resourceGroups/smankenb_rg_5483/providers/Microsoft.Web/sites/ankenbruckdevops-flask-demo",
+  "ipSecurityRestrictions": [
+    {
+      "action": "Allow",
+      "description": "Allow all access",
+      "headers": null,
+      "ipAddress": "Any",
+      "name": "Allow all",
+      "priority": 1,
+      "subnetMask": null,
+      "subnetTrafficTag": null,
+      "tag": null,
+      "vnetSubnetResourceId": null,
+      "vnetTrafficTag": null
+    }
+  ],
+  "javaContainer": null,
+  "javaContainerVersion": null,
+  "javaVersion": null,
+  "keyVaultReferenceIdentity": null,
+  "kind": null,
+  "limits": null,
+  "linuxFxVersion": "PYTHON|3.7",
+  "loadBalancing": "LeastRequests",
+  "localMySqlEnabled": false,
+  "location": "Central US",
+  "logsDirectorySizeLimit": 100,
+  "machineKey": null,
+  "managedPipelineMode": "Integrated",
+  "managedServiceIdentityId": null,
+  "minTlsVersion": "1.2",
+  "minimumElasticInstanceCount": 0,
+  "name": "ankenbruckdevops-flask-demo",
+  "netFrameworkVersion": "v4.0",
+  "nodeVersion": "",
+  "numberOfWorkers": 1,
+  "phpVersion": "",
+  "powerShellVersion": "",
+  "preWarmedInstanceCount": 0,
+  "publicNetworkAccess": null,
+  "publishingUsername": "$ankenbruckdevops-flask-demo",
+  "push": null,
+  "pythonVersion": "",
+  "remoteDebuggingEnabled": false,
+  "remoteDebuggingVersion": "VS2019",
+  "requestTracingEnabled": false,
+  "requestTracingExpirationTime": null,
+  "resourceGroup": "smankenb_rg_5483",
+  "scmIpSecurityRestrictions": [
+    {
+      "action": "Allow",
+      "description": "Allow all access",
+      "headers": null,
+      "ipAddress": "Any",
+      "name": "Allow all",
+      "priority": 1,
+      "subnetMask": null,
+      "subnetTrafficTag": null,
+      "tag": null,
+      "vnetSubnetResourceId": null,
+      "vnetTrafficTag": null
+    }
+  ],
+  "scmIpSecurityRestrictionsUseMain": false,
+  "scmMinTlsVersion": "1.2",
+  "scmType": "None",
+  "tracingOptions": null,
+  "type": "Microsoft.Web/sites",
+  "use32BitWorkerProcess": true,
+  "virtualApplications": [
+    {
+      "physicalPath": "site\\wwwroot",
+      "preloadEnabled": true,
+      "virtualDirectories": null,
+      "virtualPath": "/"
+    }
+  ],
+  "vnetName": "",
+  "vnetPrivatePortsCount": 0,
+  "vnetRouteAllEnabled": false,
+  "webSocketsEnabled": false,
+  "websiteTimeZone": null,
+  "windowsFxVersion": null,
+  "xManagedServiceIdentityId": null
+}
+
+##############
+
+
+# Create an Azure DevOps project and connect to Azure
+
+To deploy to Azure App Service from Azure Pipelines,
+you need to establish a service connection between the two services.
+
+Go to https://dev.azure.com/smankenb/ select the existing project
+
+A project is a grouping for boards, repositories, pipelines, and other aspects of Azure DevOps.
+
+On the Project Settings page, select Pipelines > Service connections,
+then select New service connection, and then select Azure Resource Manager from the dropdown.
+
+In the Add an Azure Resource Manager service connection dialog box:
+
+Give the connection a name. Make note of the name to use later in the pipeline.
+For Scope level, select Subscription.
+Select the subscription for your App Service from the Subscription drop-down list.
+Under Resource Group, select your resource group from the dropdown.
+Make sure the option Allow all pipelines to use this connection is selected, and then select OK.
+
+# Create a Python-specific pipeline to deploy to App Service
