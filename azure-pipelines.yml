@@ -33,22 +33,25 @@ steps:
   displayName: 'pytest'
 
 # Build on master only
-- task: Docker@2
+- task: Docker@1
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  displayName: Build an image
+  displayName: 'Build the Docker image'
   inputs:
-    repository: $(imageName)
-    command: build
-    Dockerfile: Dockerfile
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'Docker Hub'
+    command: 'Build an image'
+    dockerFile: 'Dockerfile'
+    imageName: '$(imageName)'
+    includeLatestTag: true
+    useDefaultContext: false
+    buildContext: '.'
 
 # Push image on master only
-- task: Docker@2
+- task: Docker@1
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  displayName: Push image to dockerhub
+  displayName: 'Push the Docker image to Dockerhub'
   inputs:
-    containerRegistry: 'Container Registry'
+    containerregistrytype: 'Container Registry'
     dockerRegistryEndpoint: 'Docker Hub'
-    command: push
-    repository: $(imageName)
-    tags: |
-      dockerImage1
+    command: 'Push an image'
+    imageName: '$(imageName)'
