@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  imageName: 'ankenbruckdevops/azuredemo:$(Build.BuildId)'
+  imageName: 'smankenb/ankenbruckdevops:$(Build.BuildId)'
 
 steps:
 - task: UsePythonVersion@0
