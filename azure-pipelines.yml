@@ -1,17 +1,13 @@
-# Python package
-# Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
-
+name: Docker-Image-Demo
 trigger:
 - master
 - feature/*
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 variables:
-  imageName: 'pipelines-python-docker'
+  imageName: 'ankenbruckdevops/azuredemo:$(Build.BuildId)'
 
 steps:
 - task: UsePythonVersion@0
@@ -37,11 +33,25 @@ steps:
   displayName: 'pytest'
 
 # Build on master only
-- task: Docker@2
+- task: Docker@1
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  displayName: Build an image
+  displayName: 'Build the Docker image'
   inputs:
-    repository: $(imageName)
-    command: build
-    Dockerfile: Dockerfile
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'Docker Hub'
+    command: 'Build an image'
+    dockerFile: 'Dockerfile'
+    imageName: '$(imageName)'
+    includeLatestTag: true
+    useDefaultContext: false
+    buildContext: '.'
 
+# Push image on master only
+- task: Docker@1
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'Push the Docker image to Dockerhub'
+  inputs:
+    containerregistrytype: 'Container Registry'
+    dockerRegistryEndpoint: 'Docker Hub'
+    command: 'Push an image'
+    imageName: '$(imageName)'
