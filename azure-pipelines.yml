@@ -32,9 +32,8 @@ steps:
     pytest --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml
   displayName: 'pytest'
 
-# Build on master only
+# Build on all branches
 - task: Docker@1
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   displayName: 'Build the Docker image'
   inputs:
     containerregistrytype: 'Container Registry'
